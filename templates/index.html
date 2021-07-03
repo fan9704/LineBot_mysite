@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Restaurant King{% endblock title %} 
+{% block css %}
+    <style>
+        h2 {
+            text-align: center;
+            line-height: 2;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        
+        .user {
+            text-align: center;
+            align-items: center;
+        }
+        
+        a.user {
+            width: 100%;
+            position: absolute;
+        }
+
+</style>{% endblock css %}
+{% block content %}
+    <h2>歡迎來到餐廳王</h2>
+    {% if request.user.is_authenticated %}
+    <p class="user">{{request.user}}你已經登入囉~
+        <a href="/accounts/logout/">登出</a>
+    </p>
+    <a class="user" href="/restaurants_list/">餐廳列表</a> {% else%}
+    <p class="user">您尚未登入喔~ <a href="/accounts/login/">登入</a></p>
+    {%endif%}
+{% endblock content %}
+    

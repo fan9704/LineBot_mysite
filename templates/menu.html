@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load myfliters %}
+{% block title %}Menu{% endblock title %}
+   {% block css %}
+    <style>
+        th,
+        p,
+        h2,
+        td {
+            text-align: center;
+        }
+        
+        div.menus {
+            text-align: center;
+            padding: 40px 15px;
+        }
+    </style>{% endblock css %}
+
+
+<body>
+{% block content %}
+
+
+    <h2>{{restaurants.name}}的menu</h2>
+    {% if restaurants.food_set.all %}
+    <p>本餐廳共有{{ restaurants.food_set.all|length }}道菜</p>
+    <table class="table">
+        <tr>
+            <th>菜名</th>
+            <th>價格</th>
+            <th>甜不辣</th>
+            <th>註解</th>
+        </tr>
+        {% for food in restaurants.food_set.all%}
+        <tr>
+            <td>{{food.name}}</td>
+            <td>{{food.price}}</td>
+            <td>{{food.is_spicy|yes_no:"辣/不辣" }}</td>
+            <td>{{food.comment}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+
+    {% else %}
+    <p>本餐廳啥都沒賣</p>
+    {% endif%}
+
+{% endblock  %} 
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivrestaurants.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js " integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF " crossorigin="anonymous "></script>

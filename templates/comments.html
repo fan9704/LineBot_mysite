@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+    {% block title %}Document{% endblock title %}{% block css %}
+    <style>
+        
+        form,
+        p,
+        h2 {
+            align-items: center;
+            text-align: center;
+        }
+        
+        p,
+        h2,
+        td {
+
+            margin: 0;
+            padding: 15px;
+        }
+        
+
+    </style>{% endblock css %}
+
+
+{% block content %}
+    <h2>{{r.name}}的評價</h2>
+    {% if r.comment_set.all %}
+    <p>目前共有{{r.comment_set.all|length}}條評價</p>
+    <table class="table ">
+        <tr>
+            <th>留言者</th>
+            <th>時間</th>
+            <th>評價</th>
+        </tr>
+        {% for c in r.comment_set.all %}
+        <tr>
+            <td>{{c.visitor}}</td>
+            <td>{{c.date_time}}</td>
+            <td>{{c.content}}</td>
+        </tr>
+        {% endfor%}
+    </table>
+    {% else%}
+    <p>無評價</p>
+    {%endif %}
+
+    <hr>
+    <div class="col-12 table-responsive   container-fluid"> <br><br> {% if f.errors %}
+        <p style="color: red;">請依提示修復表單</p>
+        {%endif%}
+        <form action="" method="POST">{% csrf_token %}
+            <!-- <table class="table">{{f.as_table}}</table> -->
+
+            <table class="table">
+                <tr>
+                    <th><label for="id_visitor">留言者:</label></th>
+                    <td> {{f.visitor}}</td>
+                    <td> {{f.visitor.errors}}</td>
+                </tr>
+                <tr>
+                    <th><label for="id_email">電子信箱:</label></th>
+                    <td> {{f.email}}</td>
+                    <td> {{f.email.errors}}</td>
+                </tr>
+                <tr>
+                    <th><label for="id_content">評價:</label></th>
+                    <td> {{f.content}}</td>
+                    <td> {{f.content.errors}}</td>
+                </tr>
+
+            </table>
+            <input type="submit" value="給予評價">
+
+
+        </form>
+    </div>
+{% endblock content %}
+   

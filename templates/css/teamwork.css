@@ -1,0 +1,169 @@
+.introduction {
+    align-items: right;
+    text-align: right;
+    padding: 20px;
+}
+
+.Lesson_title {
+    border-radius: 20px;
+    margin: 0px 15%;
+    background-color: rgb(92, 153, 92);
+}
+
+#title {
+    text-decoration: none;
+    color: aliceblue;
+    font-size: x-large;
+}
+
+.header {
+    background-color: #000;
+    color: white;
+    padding: 20px 10px 10px 10px;
+}
+
+.headerlink {
+    text-decoration: none;
+    margin: 0px 10px;
+    color: rgb(65, 253, 65);
+}
+
+.navlink {
+    text-align: right;
+    right: 20px;
+}
+
+.navlink :hover {
+    transition: 0.5s;
+    color: ivory;
+}
+
+.fullcol {
+    height: 100px;
+    background-color: #000;
+}
+
+.topcontainer {
+    background-color: #000;
+    color: white;
+    margin: auto;
+    padding: auto;
+    padding-top: 50px;
+}
+
+.contenttop {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.h1top {
+    text-align: center;
+    vertical-align: middle;
+    color: rgb(120, 245, 120);
+    line-height: 1.5;
+    display: none;
+}
+
+.h1top .h1p {
+    color: white;
+    font-size: 16px;
+    display: none;
+}
+
+#allclassname {
+    display: none;
+    border: 5px solid rgb(7, 122, 7);
+    background-color: rgb(107, 224, 152);
+    text-align: center;
+    padding: 10px;
+    line-height: 2;
+}
+
+.lessonrow {
+    text-align: center;
+    line-height: 3;
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+.lessonrow2 {
+    line-height: 2.5;
+    font-size: 16px;
+}
+
+#allclassname a {
+    text-decoration: none;
+    color: black;
+}
+
+#allclassname a:hover {
+    color: white;
+    transition: 0.5s;
+}
+
+.contact {
+    background-color: rgb(120, 245, 120);
+    padding: 10px;
+}
+
+.line-contact {
+    font-size: 22px;
+    line-height: 2;
+    position: relative;
+}
+
+.img-line {
+    margin: 10px;
+}
+
+#carouselExampleCaptions {
+    border: solid 10px black;
+}
+
+.contactcol {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    margin: auto;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.contactcol h1 {
+    color: rgb(255, 255, 255);
+    line-height: 3;
+}
+
+.aboutme {
+    line-height: 2;
+}
+
+.contactcol p {
+    color: white;
+}
+
+.footer {
+    background-color: #000;
+    text-align: center;
+    color: white;
+    line-height: 10;
+}
+
+.border-row {
+    background-color: lime;
+    padding: 10px;
+}
+
+.content-col {
+    background-color: #000;
+    width: 100px;
+    text-align: center;
+    color: linen;
+    padding: 5px;
+}
+
+.tableizer-table {
+    width: 100%;
+    text-align: center;
+    line-height: 2;
+    border: white solid 3px;
+}

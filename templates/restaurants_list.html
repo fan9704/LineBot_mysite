@@ -1,0 +1,69 @@
+{% extends 'base.html' %} {% block title %}Menu Document{% endblock title %} {% block css %}
+<style>
+    h2,
+    form {
+        text-align: center;
+        color: rgb(6, 158, 82);
+    }
+    
+    .row {
+        background-color: #76b852;
+        padding: 10px;
+    }
+    
+    .row .col-12 {
+        background-color: #000;
+    }
+    
+    .table th {
+        color: #72d83b;
+    }
+    
+    .table td {
+        color: white;
+        line-height: 2;
+    }
+    
+    button,
+    td a {
+        border-radius: 5px;
+        padding: 5px;
+        background-color: #76b852;
+        color: black;
+        font-weight: bold;
+        border: solid black 2px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+</style>{% endblock css %} {% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h2 style="margin: 10px auto;">餐廳列表</h2>
+            <form action="/menu/" method="GET">
+                <table class="table">
+                    <tr>
+                        <th>選取</th>
+                        <th>店名</th>
+                        <th>電話</th>
+                        <th>地址</th>
+                        {% if perms.restaurants.can_comment %}
+                        <th>評價</th>
+                        {% endif %}
+                    </tr>
+                    {% for r in objs %}
+                    <tr>
+                        <td><a href="/menu/?id={{r.id}}">看菜單</a></td>
+                        <td>{{r.name}}</td>
+                        <td>{{r.phone_number}}</td>
+                        <td>{{r.address}}</td>
+                        <td><a href="/comment/{{r.id}}/">評論</a></td>
+                    </tr>
+                    {% endfor%}
+                </table>
+                <!-- <input type="submit" value="觀看menu" style="margin-bottom: 10px;"> -->
+        </div>
+    </div>
+    </form>
+
+</div>
+{%endblock %}

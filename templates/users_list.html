@@ -1,0 +1,39 @@
+{% extends 'base.html' %} {% block title %}User_list{% endblock title %} {% block css %}
+<style>
+    .row {
+        background-color: #76b852;
+        padding: 10px;
+    }
+    
+    .row .col-12 {
+        background-color: #000;
+    }
+    
+    .table th {
+        color: #72d83b;
+    }
+    
+    .table td {
+        color: white;
+    }
+</style>{% endblock css %} {% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <tr>
+                    <th>使用者帳號</th>
+                    <th>使用者姓名</th>
+                </tr>
+                {% for u in objs %}
+                <tr>
+                    <td>{{u.username}}</td>
+                    <td>{{u.last_name}} {{u.first_name}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
