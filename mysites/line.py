@@ -690,7 +690,7 @@ def checkSQL(requestText,event):
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text=str(ans)))
 
 def sendmsg(requestText,event):
-    print("H")
+    print("Hello World")
 #     messages=TextSendMessage(text='Hello World!'),
 #     recipient=AudienceRecipient(group_id=5614991017776),
 #     filter=Filter(demographic=AgeFilter(gte="age_35", lt="age_40")),
