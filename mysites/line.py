@@ -107,10 +107,8 @@ def callback(request):
                     else:
                         normalRequest(requestText,event)
             elif isinstance(event, JoinEvent):#加入群組
-                
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text='歡迎"{0}"加入群組!!!\n'.format(username)))
             elif isinstance(event, LeaveEvent):#離開群組
-              
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text='"{0}"離開群組了RIP'.format(username)))
             elif isinstance(event, FollowEvent):#加入好友
         

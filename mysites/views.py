@@ -90,7 +90,7 @@ def comment(request,id):
     return render(request,'comments.html',locals())
 
 def set_c(request):
-    response=HttpResponse('Set your lucky_number as 8')
+    reseponse=HttpResponse('Set your lucky_number as 8')
     response.set_cookie('lucky_number',8)
     return response
 
