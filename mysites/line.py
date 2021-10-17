@@ -11,7 +11,7 @@ import pandas as pd
 import time
 import json
 import random 
-import sqlite3
+# import sqlite3
 import psycopg2
 import os
 
