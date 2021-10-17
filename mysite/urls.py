@@ -33,6 +33,7 @@ urlpatterns = [
     path('accounts/login/',mysites.views.sign_in,name='Login'),
     path('accounts/register/',mysites.views.register, name='Register'),
     path('index/', mysites.views.IndexView.as_view()),
+    path('', mysites.views.IndexView.as_view()),
     path('accounts/logout/',mysites.views.logout),
     path('firstmenu/', mysites.views.menu, {'id':'1'}),
     path('secondmenu/', mysites.views.menu, {'id':'2'}),

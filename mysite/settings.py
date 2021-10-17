@@ -80,9 +80,17 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # },
+     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ddeearq94797n1',
+        'USER': 'qdkpapugcawvte',
+        'PASSWORD': 'a8c078c6d04a26737983146819622d8303847b184319fb214ca5e8503a728032',
+        'HOST': 'ec2-54-164-56-10.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
@@ -125,13 +133,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+STATIC_ROOT=BASE_DIR/'staticfiles'
+MEDIA_URL='/media/'
+MEDIA_ROOT=[BASE_DIR/"media"]
 LANGUAGES = (
     ('en', ('English')),
-    ('zh-hant', _('Traditional Chinese')),
+    ('zh-hant', ('Traditional Chinese')),
 )
 
 LOCALE_PATHS = (

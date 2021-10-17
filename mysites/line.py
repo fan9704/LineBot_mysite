@@ -12,13 +12,18 @@ import time
 import json
 import random 
 import sqlite3
-
+import psycopg2
 import os
 
 
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 
+database = 'ddeearq94797n1'
+user = 'qdkpapugcawvte'
+host = 'ec2-54-164-56-10.compute-1.amazonaws.com'
+port = '5432'
+password = 'a8c078c6d04a26737983146819622d8303847b184319fb214ca5e8503a728032'
 
 @csrf_exempt
 def callback(request):
@@ -36,7 +41,7 @@ def callback(request):
         for event in events:
             profile = line_bot_api.get_profile(event.source.user_id)  
             username=profile.display_name
-            if isinstance(event, MessageEvent): #已刪除txt 跟xlsx
+            if isinstance(event, MessageEvent): 
                 if(event.message.type=="sticker"):
                     sendSticker("requestText",event)
                 elif(event.message.type=="location" or event.message.type=="file" or event.message.type=='image' or event.message.type=='video'):
@@ -48,12 +53,11 @@ def callback(request):
                     user_idlist=[]#所有使用者ID列表
                     profile = line_bot_api.get_profile(event.source.user_id)  
                     #sql
-                    con=sqlite3.connect('db.sqlite3')
+                    con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
                     cur = con.cursor()
-                    if os.path.exists("db.sqlite3"):
-                            cur.execute('INSERT INTO user (u_id,user_displayname,request) VALUES ("{0}","{1}","{2}")'.format(str(user_id),str(profile.display_name),str(requestText)))
-                            print("INSERT complete")
-                            for row in list(cur.execute('SELECT DISTINCT u_id,user_displayname FROM user')):#列出所有使用者
+                    cur.execute('INSERT INTO user (u_id,user_displayname,request) VALUES ("{0}","{1}","{2}")'.format(str(user_id),str(profile.display_name),str(requestText)))
+                    print("INSERT complete")
+                    for row in list(cur.execute('SELECT DISTINCT u_id,user_displayname FROM user')):#列出所有使用者
                                 print("使用者ID",row[0],"使用者名稱",row[1])
                                 user_idlist.append(row[0])
                                 user_namelist.append(row[1])
@@ -510,7 +514,7 @@ def storagecode(requestText,event):
         codeEnter=requestText[6:]
         nowTime=time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
         #sql
-        con=sqlite3.connect('db.sqlite3')
+        con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
         cur = con.cursor()
         if os.path.exists("db.sqlite3"):
                 cur.execute('INSERT INTO investigate (User,Date,Program) VALUES ("{0}","{1}","{2}")'.format(str(profile.display_name),nowTime,codeEnter))
@@ -624,14 +628,14 @@ def learn(requestText,event):
     k=userEnter[1]
     v=userEnter[2]
     if(userEnter[0]=="@機器人學表情"):
-        con=sqlite3.connect('db.sqlite3')
+        con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
         cur = con.cursor()
         cur.execute('INSERT INTO image (request,response) VALUES ("{0}","{1}")'.format(k,v))
         print("INSERT Learning complete")
         con.commit()
         con.close()
     if(userEnter[0]=="@機器人學"):
-        con=sqlite3.connect('db.sqlite3')
+        con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
         cur = con.cursor()
         cur.execute('INSERT INTO language (request,response) VALUES ("{0}","{1}")'.format(k,v))
         print("INSERT Learning complete")
@@ -643,7 +647,7 @@ def learn(requestText,event):
 
 def speak(requestText,event):
     try:
-        con=sqlite3.connect('db.sqlite3')
+        con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
         cur = con.cursor()
         for response in cur.execute('SELECT * FROM image WHERE request = "{0}"'.format(requestText)):
             print(response)
@@ -664,7 +668,7 @@ def speak(requestText,event):
 def forget(requestText,event):
     ans=requestText.split(' ')
     print(ans)
-    con=sqlite3.connect('db.sqlite3')
+    con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
     cur = con.cursor()
     cur.execute('DELETE FROM language WHERE request="{0}"'.format(ans[1]) )
     con.commit()
@@ -672,7 +676,7 @@ def forget(requestText,event):
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="I have forgotten: "+str(ans[1])))
 
 def checkSQL(requestText,event):
-    con=sqlite3.connect('db.sqlite3')
+    con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
     cur = con.cursor()
     if("語言" in requestText):
         ans="機器人語言資料庫如下:\n\n"
