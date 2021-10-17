@@ -8,3 +8,4 @@ psycopg2==2.9.1
 gunicorn==20.1.0
 pandas==1.2.2
 beautifulsoup4==4.9.3
+line-bot-sdk==1.18.0
