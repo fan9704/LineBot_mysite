@@ -9,3 +9,4 @@ gunicorn==20.1.0
 pandas==1.2.2
 beautifulsoup4==4.9.3
 line-bot-sdk==1.18.0
+dj_static==0.0.6
