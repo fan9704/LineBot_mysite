@@ -53,4 +53,5 @@ class Comment(models.Model):
 
         )
 class Account(models.Model):
+    id=models.AutoField()
     money = models.IntegerField()

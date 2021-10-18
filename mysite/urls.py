@@ -25,7 +25,7 @@ import mysites.views
 from mysites.line import callback
 #path(pattern,action)
 urlpatterns = [
-    url('^callback', callback),
+    path('callback/', callback),
     path('admin/', admin.site.urls),
     url(r'^menu/$',mysites.views.menu),
     url(r'^welcome/$',mysites.views.welcome),
