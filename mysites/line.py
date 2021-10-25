@@ -29,7 +29,7 @@ password = 'a8c078c6d04a26737983146819622d8303847b184319fb214ca5e8503a728032'
 def callback(request):
     
     if request.method == 'POST':
-        signature = request.META['http_x-line-signature']
+        signature = request.META['HTTP_X_LINE_SIGNATURE']
         body = request.body.decode('utf-8')
         try:
             events = parser.parse(body, signature)

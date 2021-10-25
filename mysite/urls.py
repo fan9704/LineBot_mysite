@@ -46,4 +46,3 @@ if settings.DEBUG:#DEBUG模式開啟後才能用的功能
     urlpatterns += [
         # url(r'^(\w+)/math/(\w+)/$',mysites.views.math), #(\w+))代表接收的參數
     ]
-#正規表達式 ^代表配對開始 $代表配對結束

@@ -5,7 +5,7 @@ from django.core import serializers
 from django import http
 from django.urls import resolvers
 from django.contrib.auth.forms import UserCreationForm
-from mysites.form import CommentForm,LoginForm
+from mysites.form import CommentForm,LoginForm,RegisterForm
 import django
 from django.utils.decorators import method_decorator
 from django.contrib.auth import authenticate, login, logout
@@ -24,14 +24,6 @@ from django.http import HttpResponse, request,HttpResponseRedirect, response,Htt
 def index(request):
     return render(request,'Teamwork.html',locals())
 
-def meta(request):
-    values=request.META.items()
-    values.sort()
-    html=[]
-    for k,v in values:
-        html.append('<tr><td>{0}</td><td>{1}</td></tr>'.format(k,v))
-    return HttpResponse('<table>{0}</table>'.format('\n'.join(html)))
-
 def welcome(request):
     if 'user_name' in request.GET and request.GET['user_name'] != '':
         return HttpResponse('Welcome!~'+request.GET['user_name'])
@@ -47,9 +39,6 @@ def list(request, model):
 #     template_name = 'menu.html'
 #     context_object_name = 'restaurant'
 
-#     @method_decorator(login_required)
-#     def dispatch(self, request, *args, **kwargs):
-#         return super(MenuView, self).dispatch(request, *args, **kwargs)
 
 #     def get(self, request, pk, *args, **kwargs):
 #         try:
@@ -85,8 +74,7 @@ def comment(request,id):
             c=Comment.objects.create(visitor=visitor,email=email,content=content,date_time=date_time,restaurant=r)
             f=CommentForm(initial={'content':'我沒意見'})
     else:
-         f=CommentForm(initial={'content':'我沒意見'})
-      
+        f=CommentForm(initial={'content':'我沒意見'})
     return render(request,'comments.html',locals())
 
 def set_c(request):

@@ -20,3 +20,34 @@ class LoginForm(forms.Form):
         label="密碼",
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )
+    def clean_content(self):
+        # content = self.cleaned_data['content']
+        if len(content) < 5:
+            raise forms.ValidationError('帳號或密碼錯誤')
+        return content
+
+class RegisterForm(forms.Form):
+    username = forms.CharField(
+        label="帳號",
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    password = forms.CharField(
+        label="密碼",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+    password2 = forms.CharField(
+        label="確認密碼",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+    first_name = forms.CharField(
+        label="姓氏",
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    last_name = forms.CharField(
+        label="名字",
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    email=forms.EmailField(
+        label="電子郵件",
+        widget=forms.TextInput(attrs={"class":"form-control"})
+    )

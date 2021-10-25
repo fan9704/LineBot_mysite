@@ -52,6 +52,21 @@ class Comment(models.Model):
             ("can_comment","Can_comment"),
 
         )
-class Account(models.Model):
-    #id=models.AutoField()
-    money = models.IntegerField()
+
+class LineAccount(models.Model):
+    u_id=models.CharField(max_length=255,primary_key=True)
+    user_displayname=models.CharField(max_length=255)
+
+class language(models.Model):
+    request=models.CharField(max_length=100,primary_key=True)
+    response=models.CharField(max_length=100)
+
+class investiage(models.Model):
+    User = models.CharField(max_length=255,primary_key=True)
+    date = models.DateTimeField()
+    program = models.CharField(max_length=50)
+
+class image(models.Model):
+    request = models.CharField(max_length=100, primary_key=True)
+    response = models.CharField(max_length=100)
+    
