@@ -46,7 +46,7 @@ def callback(request):
                     sendSticker("requestText",event)
                 elif(event.message.type=="location" or event.message.type=="file" or event.message.type=='image' or event.message.type=='video'):
                     print("")
-                else:
+                elif(event.message.type=="text"):
                     requestText=event.message.text
                     user_id = event.source.user_id #物件
                     user_namelist=[]#所有使用者NAME列表
@@ -160,7 +160,7 @@ def normalRequest(requestText,event):
 def sendImg(requestText,event):#貓咪
     try:
         if("鴻銘" in requestText):
-               message=ImageSendMessage(
+            message=ImageSendMessage(
             original_content_url="https://img.onl/3dm1Ug",
             preview_image_url="https://img.onl/3dm1Ug"
             )
@@ -272,7 +272,7 @@ def sendWeather(requestText,event): #天氣
                 count=count+1
                 c1=c1+" "+l
                 if count % 3 ==0:
-                     c1=c1+"\n"
+                    c1=c1+"\n"
             
             for c in City:
                 nationPart=c.find('div',{'class':'nationpart'}).text
