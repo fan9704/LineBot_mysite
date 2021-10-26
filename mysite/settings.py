@@ -91,7 +91,18 @@ DATABASES = {
         'PASSWORD': 'a8c078c6d04a26737983146819622d8303847b184319fb214ca5e8503a728032',
         'HOST': 'ec2-54-164-56-10.compute-1.amazonaws.com',
         'PORT': '5432',
-    }
+    },
+    # 'slave':{
+    #     'ENGINE':'django.db.backends.mysql',
+    #     'HOST':'127.0.0.1',
+    #     'PORT':'3306',
+    #     'NAME':'guest',
+    #     'USER':'root',
+    #     'PASSWORD':'cxz123499',
+    #     'OPTIONS':{
+    #         'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
+    #     },
+    # }
 }
 
 

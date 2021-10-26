@@ -1,0 +1,11 @@
+{% extends "base2.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="subjectDiv">標題 {{photo.palbum.atitle}}</div>
+    <div class="actionDiv"><a href="/albumshow/{{album}}/">回上一頁</a></div>
+    <div class="photoDiv"><img src="/media/{{photo.purl}}" /></div>
+    <div class="normalDiv">
+      <p align="center">{{photo.psubject}}</p>
+    </div>
+{% endblock %}

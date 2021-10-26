@@ -1,0 +1,19 @@
+{% extends "base2.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="subjectDiv"> 標題 {{monophoto.palbum.atitle}}</div>
+    <div class="actionDiv">照片總數：{{totalphoto}} </div>
+    <div class="normalDiv">
+      <p><strong>拍攝時間</strong>：{{monophoto.palbum.adate}} 
+        <strong>拍攝地點</strong>：{{monophoto.palbum.alocation}}</p>
+      <p>{{monophoto.palbum.adesc}}</p>
+    </div>
+    {% for photo in photos %}
+      <div class="albumDiv">
+        <div class="picDiv"><a href="/albumphoto/{{photo.id}}/{{album}}/"><img src="/media/{{photo.purl}}" width="120" height="120" border="0" /></a></a></div>
+        <div class="albuminfo"><a href="/albumphoto/{{photo.id}}/{{album}}/">{{photo.psubject}}</a><br />
+          <span class="smalltext">點閱次數：</span>{{photo.phit}}</div>
+      </div>
+    {% endfor %}
+{% endblock %}

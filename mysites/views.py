@@ -16,7 +16,7 @@ from django.shortcuts import redirect, render
 from django import template
 from django.template.loader import get_template
 from django.template import RequestContext, context
-from mysites.models import Restaurant,Food,Comment
+from mysites.models import Restaurant,Food,Comment,PhotoModel,AlbumModel
 from django.views.generic.edit import FormView
 # Create your views here.
 from django.http import HttpResponse, request,HttpResponseRedirect, response,Http404
@@ -138,3 +138,20 @@ class IndexView(TemplateView):
         # 加入我們額外想要的時間參數
         context["time"] = timezone.now()
         return context
+        
+def albumshow(request,albumid=None):
+    album=albumid
+    photos=PhotoModel.objects.filter(palbum__id=albumid).order_by('-id')
+    monophoto=photos[0]
+    totalphoto=len(photos)
+    return render(request,'albumshow.html',locals())
+
+def albumphoto(request,photoid=None,albumid=None):
+    album=albumid
+    photo=PhotoModel.objects.get(id=photoid)
+    photo.phit+=1
+    photo.save()
+    return render(request,'albumphoto.html',locals())
+
+def User_setting(request):
+    pass

@@ -42,6 +42,7 @@ def callback(request):
             profile = line_bot_api.get_profile(event.source.user_id)  
             username=profile.display_name
             if isinstance(event, MessageEvent): 
+                print(event)
                 if(event.message.type=="sticker"):
                     sendSticker("requestText",event)
                 elif(event.message.type=="location" or event.message.type=="file" or event.message.type=='image' or event.message.type=='video'):
@@ -55,7 +56,7 @@ def callback(request):
                     #sql
                     con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
                     cur = con.cursor()
-                    cur.execute('INSERT INTO user (u_id,user_displayname,request) VALUES ("{0}","{1}","{2}")'.format(str(user_id),str(profile.display_name),str(requestText)))
+                    cur.execute('INSERT INTO "user" (u_id,user_displayname,request) VALUES ("{0}","{1}","{2}")'.format(str(user_id),str(profile.display_name),str(requestText)))
                     print("INSERT complete")
                     for row in list(cur.execute('SELECT DISTINCT u_id,user_displayname FROM user')):#列出所有使用者
                                 print("使用者ID",row[0],"使用者名稱",row[1])
