@@ -33,7 +33,7 @@ def callback(request):
         body = request.body.decode('utf-8')
         try:
             events = parser.parse(body, signature)
-            # print(events)
+            print(events)
         except InvalidSignatureError:
             return HttpResponseForbidden()
         except LineBotApiError:
@@ -41,14 +41,14 @@ def callback(request):
         for event in events:
             profile = line_bot_api.get_profile(event.source.user_id)  
             username=profile.display_name
-            if isinstance(event, MessageEvent): 
-                print(event)
+            if isinstance(event, MessageEvent):  
                 if(event.message.type=="sticker"):
                     sendSticker("requestText",event)
                 elif(event.message.type=="location" or event.message.type=="file" or event.message.type=='image' or event.message.type=='video'):
                     print("")
                 elif(event.message.type=="text"):
                     requestText=event.message.text
+                    print(requestText)
                     user_id = event.source.user_id #物件
                     user_namelist=[]#所有使用者NAME列表
                     user_idlist=[]#所有使用者ID列表
@@ -56,21 +56,17 @@ def callback(request):
                     #sql
                     con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
                     cur = con.cursor()
-                    cur.execute('INSERT INTO "user" (u_id,user_displayname,request) VALUES ("{0}","{1}","{2}")'.format(str(user_id),str(profile.display_name),str(requestText)))
-                    print("INSERT complete")
-                    for row in list(cur.execute('SELECT DISTINCT u_id,user_displayname FROM user')):#列出所有使用者
-                                print("使用者ID",row[0],"使用者名稱",row[1])
-                                user_idlist.append(row[0])
-                                user_namelist.append(row[1])
-
-
-                    else:
-                            cur.execute('''CREATE TABLE user (user_id text PRIMARY KEY, user_displayname text,)''')
-                            print("create succes")
-                    con.commit()
+                    try:#insert問題
+                        command='INSERT INTO mysites_lineaccount (u_id,user_displayname) VALUES ("{0}","{1}")'.format(user_id,profile.display_name)
+                        print(command)
+                        cur.execute(command)
+                        print("INSERT complete")
+                    except Exception as E:
+                        print(E)
                     con.close()
                     #sql
                     nowTime=time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
+                    
                     if(user_id==""):
                         break
                     if("@今天天氣 使用方法" == requestText or("@今天天氣" in requestText and "部" in requestText))or("@天氣預報 使用方法" == requestText or("@天氣預報" in requestText and "部" in requestText)):
