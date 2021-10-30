@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, response
 from django.views.decorators.csrf import csrf_exempt
-
+from mysites.models import image,investigate,language
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent,UnfollowEvent,FollowEvent,PostbackEvent,JoinEvent,LeaveEvent, TextSendMessage,TemplateSendMessage,StickerSendMessage,CarouselTemplate,CarouselColumn,URIAction,ImageSendMessage,QuickReply,QuickReplyButton,MessageAction,LocationSendMessage
@@ -11,7 +11,6 @@ import pandas as pd
 import time
 import json
 import random 
-# import sqlite3
 import psycopg2
 import os
 
@@ -57,7 +56,7 @@ def callback(request):
                     con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
                     cur = con.cursor()
                     try:#insert問題
-                        command='INSERT INTO mysites_lineaccount (u_id,user_displayname) VALUES ("{0}","{1}")'.format(user_id,profile.display_name)
+                        command='''INSERT INTO mysites_lineaccount (u_id,user_displayname) VALUES ('%s','%s')'''%(user_id,profile.display_name)
                         print(command)
                         cur.execute(command)
                         print("INSERT complete")
@@ -68,7 +67,7 @@ def callback(request):
                     nowTime=time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
                     
                     if(user_id==""):
-                        break
+                        pass
                     if("@今天天氣 使用方法" == requestText or("@今天天氣" in requestText and "部" in requestText))or("@天氣預報 使用方法" == requestText or("@天氣預報" in requestText and "部" in requestText)):
                         sendQuickreply(requestText,event)
                     elif("@今天天氣" in requestText):
@@ -225,9 +224,7 @@ def sendSticker(requestText,event):
     
         pNum=random.randint(0,len(package_list)-1)
         sNum=random.randint(0,len(package_list[pNum][1])-1)
-        # print(package_list[pNum][1])
-        # print(pNum,sNum)
-      
+
         messageSticker=StickerSendMessage(
             package_id=str(package_list[pNum][0]),
             sticker_id=package_list[pNum][1][sNum]
@@ -380,7 +377,7 @@ def sendQuickreply(requestText,event):
                 )
             )
         elif("@今天天氣 使用方法" in requestText or "@天氣預報 使用方法" in requestText):
-             msg=TextSendMessage(
+                msg=TextSendMessage(
                 text="請選擇想查看目前天氣的城市區域",
                 quick_reply=QuickReply(
                     items=[
@@ -398,11 +395,11 @@ def sendQuickreply(requestText,event):
                             action=MessageAction(label="東部及外島",text=str(quest)+" 東部及外島")
                         ),
 
-                                 ]
+                            ]
                 )
             )
         elif((str(quest)+" 北部") in requestText):
-             msg=TextSendMessage(
+                msg=TextSendMessage(
                 text="請選擇想查看目前天氣的城市",
                 quick_reply=QuickReply(
                     items=[
@@ -425,14 +422,14 @@ def sendQuickreply(requestText,event):
                         QuickReplyButton(
                             action=MessageAction(label="新竹縣",text=str(quest)+" 新竹縣")
                         ),
-                         QuickReplyButton(
+                        QuickReplyButton(
                             action=MessageAction(label="宜蘭縣",text=str(quest)+" 宜蘭縣")
                         ),
                     ]
                 )
             )
         elif((str(quest)+" 中部") in requestText):
-             msg=TextSendMessage(
+                msg=TextSendMessage(
                 text="請選擇想查看目前天氣的城市",
                 quick_reply=QuickReply(
                     items=[
@@ -445,7 +442,7 @@ def sendQuickreply(requestText,event):
                         QuickReplyButton(
                             action=MessageAction(label="彰化縣",text=str(quest)+" 彰化縣")
                         ),
-                          QuickReplyButton(
+                        QuickReplyButton(
                             action=MessageAction(label="南投縣",text=str(quest)+" 南投縣")
                         ),
                         QuickReplyButton(
@@ -455,7 +452,7 @@ def sendQuickreply(requestText,event):
                 )
             )
         elif((str(quest)+" 南部") in requestText):
-             msg=TextSendMessage(
+                msg=TextSendMessage(
                 text="請選擇想查看目前天氣的城市",
                 quick_reply=QuickReply(
                     items=[
@@ -478,14 +475,14 @@ def sendQuickreply(requestText,event):
                 )
             )
         elif((str(quest)+" 東部及外島") in requestText):
-             msg=TextSendMessage(
+                msg=TextSendMessage(
                 text="請選擇想查看目前天氣的城市",
                 quick_reply=QuickReply(
                     items=[
                         QuickReplyButton(
                             action=MessageAction(label="花蓮縣",text=str(quest)+" 花蓮縣")
                         ),
-                          QuickReplyButton(
+                        QuickReplyButton(
                             action=MessageAction(label="宜蘭縣",text=str(quest)+" 臺東縣")
                         ),
                         QuickReplyButton(
@@ -513,15 +510,10 @@ def storagecode(requestText,event):
         #sql
         con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
         cur = con.cursor()
-        if os.path.exists("db.sqlite3"):
-                cur.execute('INSERT INTO investigate (User,Date,Program) VALUES ("{0}","{1}","{2}")'.format(str(profile.display_name),nowTime,codeEnter))
-                print("INSERT complete")
-                        
-                for row in list(cur.execute('SELECT * FROM investigate')):
+        cur.execute('''INSERT INTO mysites_investigate (User,Date,Program) VALUES ('%s','%s','%s')'''%(str(profile.display_name),nowTime,codeEnter))
+        print("INSERT complete")           
+        for row in list(cur.execute('SELECT * FROM mysites_investigate')):
                     print(row)
-        else:
-                cur.execute('''CREATE TABLE investigate (Number integer PRIMARY KEY, User text, Date text,Program text)''')
-                print("create succes")
         con.commit()
         con.close()
         #sql
@@ -627,14 +619,14 @@ def learn(requestText,event):
     if(userEnter[0]=="@機器人學表情"):
         con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
         cur = con.cursor()
-        cur.execute('INSERT INTO image (request,response) VALUES ("{0}","{1}")'.format(k,v))
+        cur.execute('''INSERT INTO mysites_image (request,response) VALUES ('%s','%s')'''%(k,v))
         print("INSERT Learning complete")
         con.commit()
         con.close()
     if(userEnter[0]=="@機器人學"):
         con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
         cur = con.cursor()
-        cur.execute('INSERT INTO language (request,response) VALUES ("{0}","{1}")'.format(k,v))
+        cur.execute('''INSERT INTO mysites_language (request,response) VALUES ('%s','%s')'''%(k,v))
         print("INSERT Learning complete")
         con.commit()
         con.close()
@@ -646,7 +638,7 @@ def speak(requestText,event):
     try:
         con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
         cur = con.cursor()
-        for response in cur.execute('SELECT * FROM image WHERE request = "{0}"'.format(requestText)):
+        for response in cur.execute('''SELECT * FROM mysites_image WHERE request = '%s' '''%(requestText)):
             print(response)
             if(response[0] in requestText):
                 message=ImageSendMessage(
@@ -654,7 +646,7 @@ def speak(requestText,event):
                 preview_image_url=str(response[1])
                 )
                 line_bot_api.reply_message(event.reply_token,message)
-        for response in cur.execute('SELECT * FROM language WHERE request LIKE "{0}"'.format(requestText)):
+        for response in cur.execute('''SELECT * FROM mysites_language WHERE request LIKE %%'%s'%%'''%(requestText)):
             print(response)
         con.commit()
         con.close()
@@ -667,7 +659,7 @@ def forget(requestText,event):
     print(ans)
     con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
     cur = con.cursor()
-    cur.execute('DELETE FROM language WHERE request="{0}"'.format(ans[1]) )
+    cur.execute('''DELETE FROM mysites_language WHERE request='%s' '''%(ans[1]) )
     con.commit()
     con.close()
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text="I have forgotten: "+str(ans[1])))
@@ -678,12 +670,12 @@ def checkSQL(requestText,event):
     if("語言" in requestText):
         ans="機器人語言資料庫如下:\n\n"
         count=1
-        for response in cur.execute('SELECT * FROM language' ):
+        for response in cur.execute('''SELECT * FROM mysites_language''' ):
                 ans+=str(count)+': '+str(response[0])+" "+str(response[1])+"\n"
                 count+=1
     if("表情包" in requestText):
         ans="機器人表情包如下:\n\n"
-        for response in cur.execute('SELECT * FROM image' ):
+        for response in cur.execute('''SELECT * FROM mysites_image''' ):
                 ans+=str(response[0])+" "
     con.commit()
     con.close()

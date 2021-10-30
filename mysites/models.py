@@ -61,7 +61,7 @@ class language(models.Model):
     request=models.CharField(max_length=100,primary_key=True)
     response=models.CharField(max_length=100)
 
-class investiage(models.Model):
+class investigate(models.Model):
     User = models.CharField(max_length=255,primary_key=True)
     date = models.DateTimeField()
     program = models.CharField(max_length=50)
