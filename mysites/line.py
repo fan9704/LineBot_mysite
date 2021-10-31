@@ -60,8 +60,10 @@ def callback(request):
                         print(command)
                         cur.execute(command)
                         print("INSERT complete")
+                        con.commit()
                     except Exception as E:
-                        print(E)
+                        pass
+                        # print(E)
                     con.close()
                     #sql
                     nowTime=time.strftime("%a %b %d %H:%M:%S %Y", time.localtime())
@@ -505,7 +507,7 @@ def storagecode(requestText,event):
         #sql
         con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
         cur = con.cursor()
-        cur.execute('''INSERT INTO mysites_investigate (User,Date,Program) VALUES ('%s','%s','%s')'''%(str(profile.display_name),nowTime,codeEnter))
+        cur.execute('''INSERT INTO mysites_investigate  VALUES ('%s','%s','%s') '''%(str(profile.display_name),str(nowTime),str(codeEnter)))
         print("INSERT complete")
         cur.execute('SELECT * FROM mysites_investigate')     
         old=cur.fetchall()      
@@ -515,6 +517,8 @@ def storagecode(requestText,event):
         con.close()
         #sql
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text="感謝您填寫調查"+str(profile.display_name)))
+    except psycopg2.Error:
+        line_bot_api.reply_message(event.reply_token,TextSendMessage(text="發生錯誤!您已經填寫過"))
     except Exception as e:
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text="發生錯誤!"+str(e)))
 
@@ -645,7 +649,7 @@ def speak(requestText,event):
                 preview_image_url=str(response[1])
                 )
                 line_bot_api.reply_message(event.reply_token,message)
-        cur.execute('''SELECT * FROM mysites_language WHERE request LIKE %%'%s'%%'''%(requestText))
+        cur.execute('''SELECT * FROM mysites_language WHERE request LIKE '%%%s%%' '''%(requestText))
         old=cur.fetchall()
         for response in old:
             print(response)
