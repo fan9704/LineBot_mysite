@@ -112,13 +112,8 @@ def callback(request):
             elif isinstance(event, LeaveEvent):#離開群組
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text='"{0}"離開群組了RIP'.format(username)))
             elif isinstance(event, FollowEvent):#加入好友
-        
-                with open("userlist.txt","a") as f1:
-                    user_id = event.source.user_id
-                    f1.write(str(user_id)+"\n")
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text='"歡迎"{0}"加入好友!!!\n試試看關鍵字 @使用說明 \n來查看我有甚麼功能!? '.format(username)))
             elif isinstance(event, UnfollowEvent):#刪除好友
-                
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text='"感謝您的使用機器人很高興為您服務使用者:{0}"離開我了掰掰'.format(username)))
 
             elif isinstance(event, PostbackEvent):#Postback
@@ -327,7 +322,7 @@ def sendnotify(request,event): #sendnotify
         # line_bot_api.push_message(group_channel_id1,TextSendMessage(text="小叮嚀伺服器開機摟")) #OK
         #宿舍群組 C800fb3baa653ebbfecf736f167e1ef45
         #工館群組 C0c2a92d2e687b8d72e74614d36920e81
-        line_bot_api.broadcast(TextSendMessage(text='小叮嚀伺服器'+str(status)+'摟'))
+        line_bot_api.broadcast(TextSendMessage(text='小叮嚀伺服器'+str(status)+'摟\n\n注意由於本服務已架設置雲端 機器人服務已改為24H服務'))
         # line_bot_api.multicast( [user_channel_id1,user_channel_id2], TextSendMessage(text='小叮嚀伺服器開機摟'))#problem
     except Exception as e:
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text='發生錯誤 錯誤代碼\n'+str(e)))
@@ -511,8 +506,10 @@ def storagecode(requestText,event):
         con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
         cur = con.cursor()
         cur.execute('''INSERT INTO mysites_investigate (User,Date,Program) VALUES ('%s','%s','%s')'''%(str(profile.display_name),nowTime,codeEnter))
-        print("INSERT complete")           
-        for row in list(cur.execute('SELECT * FROM mysites_investigate')):
+        print("INSERT complete")
+        cur.execute('SELECT * FROM mysites_investigate')     
+        old=cur.fetchall()      
+        for row in old:
                     print(row)
         con.commit()
         con.close()
@@ -638,7 +635,9 @@ def speak(requestText,event):
     try:
         con=psycopg2.connect(database=database, user=user, password=password, host=host, port=port)
         cur = con.cursor()
-        for response in cur.execute('''SELECT * FROM mysites_image WHERE request = '%s' '''%(requestText)):
+        cur.execute('''SELECT * FROM mysites_image WHERE request = '%s' '''%(requestText))
+        old=cur.fetchall()
+        for response in old:
             print(response)
             if(response[0] in requestText):
                 message=ImageSendMessage(
@@ -646,9 +645,10 @@ def speak(requestText,event):
                 preview_image_url=str(response[1])
                 )
                 line_bot_api.reply_message(event.reply_token,message)
-        for response in cur.execute('''SELECT * FROM mysites_language WHERE request LIKE %%'%s'%%'''%(requestText)):
+        cur.execute('''SELECT * FROM mysites_language WHERE request LIKE %%'%s'%%'''%(requestText))
+        old=cur.fetchall()
+        for response in old:
             print(response)
-        con.commit()
         con.close()
         return  str(response[1])
     except:
@@ -670,14 +670,17 @@ def checkSQL(requestText,event):
     if("語言" in requestText):
         ans="機器人語言資料庫如下:\n\n"
         count=1
-        for response in cur.execute('''SELECT * FROM mysites_language''' ):
+        cur.execute('''SELECT * FROM mysites_language''' )
+        old=cur.fetchall()
+        for response in old:
                 ans+=str(count)+': '+str(response[0])+" "+str(response[1])+"\n"
                 count+=1
     if("表情包" in requestText):
         ans="機器人表情包如下:\n\n"
-        for response in cur.execute('''SELECT * FROM mysites_image''' ):
+        cur.execute('''SELECT * FROM mysites_image''' )
+        old=cur.fetchall()
+        for response in old:
                 ans+=str(response[0])+" "
-    con.commit()
     con.close()
     line_bot_api.reply_message(event.reply_token,TextSendMessage(text=str(ans)))
 
